@@ -42,16 +42,6 @@ impl FrameBuffer {
         self.current_color = color;
     }
 
-    pub fn render_to_file(&self, file_path: &str) {
-        self.color_buffer.export_image(file_path);
-        println!("Image saved successfully as '{}'!", file_path);
-    }
-
-    pub fn render_to_bmp(&self, file_path: &str) {
-        self.color_buffer.export_image(file_path);
-        println!("BMP file saved successfully as '{}'!", file_path);
-    }
-
     pub fn swap_buffers(&self, window: &mut RaylibHandle, raylib_thread: &RaylibThread) {
         if let Ok(texture) = window.load_texture_from_image(raylib_thread, &self.color_buffer) {
             let mut renderer = window.begin_drawing(raylib_thread);
