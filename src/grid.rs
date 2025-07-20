@@ -1,3 +1,7 @@
+use std::vec;
+
+use crate::framebuffer::FrameBuffer;
+
 pub struct Grid {
     pub width: i32,
     pub height: i32,
@@ -10,14 +14,11 @@ impl Grid {
         Grid { width, height, cells }
     }
 
-    pub fn add_cell(&mut self, x: i32, y: i32, is_alive: bool) {
+    pub fn add_cell(&mut self, fb: &mut FrameBuffer, x: i32, y: i32) {
         if x >= 0 && x < self.width && y >= 0 && y < self.height {
-           self.cells[x as usize][y as usize] = is_alive; 
+            fb.set_pixel(x, y);
+            self.cells[x as usize][y as usize] = true; 
         }
-    }
-
-    pub fn is_cell_alive(&mut self, x: i32, y: i32) -> bool {
-        return self.cells[x as usize][y as usize];
     }
 
     pub fn count_alive_neighbors(&mut self, x: i32, y: i32) -> u8 {
@@ -35,5 +36,38 @@ impl Grid {
             }
         }
         return count;
+    }
+
+    pub fn update(&mut self) {
+        let mut next = vec![vec![false; self.height as usize]; self.width as usize];
+
+        for x in 0..self.width  {
+            for y in 0..self.height {
+                let neighbors = self.count_alive_neighbors(x, y);
+                let mut current_cell = self.cells[x as usize][y as usize];
+                if current_cell {
+                    if neighbors < 2 || neighbors > 3 {
+                        current_cell = false;
+                    }
+                } else {
+                    if neighbors == 3 {
+                        current_cell = true;
+                    }
+                }
+                next[x as usize][y as usize] = current_cell;
+            }
+        }
+
+        self.cells = next;
+    }
+
+    pub fn draw(&self, fb: &mut FrameBuffer) {
+        for x in 0..self.width  {
+            for y in 0..self.height {
+                if self.cells[x as usize][y as usize] {
+                    fb.set_pixel(x, y);
+                }
+            }
+        }
     }
 }

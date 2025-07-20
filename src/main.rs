@@ -1,4 +1,4 @@
-use std::{thread, time::Duration};
+    use std::{thread, time::Duration};
 
 use grid::Grid;
 use raylib::prelude::*;
@@ -19,13 +19,12 @@ fn main() {
         .build();
 
     let mut framebuffer = FrameBuffer::new(window_width, window_height, Color::WHITE);
-    let grid = Grid::new(window_width, window_height);
+    let _grid = Grid::new(window_width, window_height);
 
     while !window.window_should_close() {
         framebuffer.clear();
 
         framebuffer.set_current_color(Color::BLACK);
-        framebuffer.draw_pulsar(10, 10);
 
         framebuffer.swap_buffers(&mut window, &raylib_thread);
 
