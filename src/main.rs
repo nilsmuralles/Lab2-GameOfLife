@@ -23,29 +23,17 @@ fn main() {
     let grid_height = window_height / 10;
     let mut grid = Grid::new(grid_width, grid_height, 10);
 
-    let offset_x = 1;
-    let offset_y = 1;
+    // Crea un grid de pulsars
+    let spacing = 20; // Espacio entre pulsars
+    let pulsars_x = 3; // Cuántos en X
+    let pulsars_y = 3; // Cuántos en Y
 
-    let gun = [
-        (1, 5), (1, 6), (2, 5), (2, 6),
-        (11, 5), (11, 6), (11, 7),
-        (12, 4), (12, 8),
-        (13, 3), (13, 9),
-        (14, 3), (14, 9),
-        (15, 6),
-        (16, 4), (16, 8),
-        (17, 5), (17, 6), (17, 7),
-        (18, 6),
-        (21, 3), (21, 4), (21, 5),
-        (22, 3), (22, 4), (22, 5),
-        (23, 2), (23, 6),
-        (25, 1), (25, 2), (25, 6), (25, 7),
-        (35, 3), (35, 4),
-        (36, 3), (36, 4),
-    ];
-
-    for &(x, y) in &gun {
-        grid.add_cell(offset_x + x, offset_y + y);
+    for i in 0..pulsars_x {
+        for j in 0..pulsars_y {
+            let offset_x = i * spacing + 3;
+            let offset_y = j * spacing + 3;
+            framebuffer.draw_pulsar(&mut grid, offset_x, offset_y);
+        }
     }
 
     while !window.window_should_close() {
