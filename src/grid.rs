@@ -5,18 +5,18 @@ use crate::framebuffer::FrameBuffer;
 pub struct Grid {
     pub width: i32,
     pub height: i32,
-    pub cells: Vec<Vec<bool>>
+    pub cells: Vec<Vec<bool>>,
+    pub scale: i32
 }
 
 impl Grid {
-    pub fn new(width: i32, height: i32) -> Self {
-        let cells = vec![vec![false; width as usize]; height as usize];
-        Grid { width, height, cells }
+    pub fn new(width: i32, height: i32, scale: i32) -> Self {
+        let cells = vec![vec![false; height as usize]; width as usize];
+        Grid { width, height, cells, scale }
     }
 
-    pub fn add_cell(&mut self, fb: &mut FrameBuffer, x: i32, y: i32) {
+    pub fn add_cell(&mut self, x: i32, y: i32) {
         if x >= 0 && x < self.width && y >= 0 && y < self.height {
-            fb.set_pixel(x, y);
             self.cells[x as usize][y as usize] = true; 
         }
     }
@@ -65,7 +65,11 @@ impl Grid {
         for x in 0..self.width  {
             for y in 0..self.height {
                 if self.cells[x as usize][y as usize] {
-                    fb.set_pixel(x, y);
+                    for dy in 0..self.scale {
+                        for dx in 0..self.scale {
+                            fb.set_pixel(x * self.scale + dx, y * self.scale + dy);
+                        }
+                    }
                 }
             }
         }
